@@ -148,7 +148,7 @@ avatar:
 disable_top_img: false
 
 # 首页的 banner 背景图，使用 CSS 格式写法时要注意引号嵌套
-index_img: 'background: url("/images/top_img1.jpg") top / cover no-repeat'
+index_img: "background: url('/images/top_img1.jpg') top / cover no-repeat" # "background: url() top / cover no-repeat"
 
 # 默认 banner 图片（用于页面未指定 top_img 时）
 default_top_img: "/images/codeforces-icon.png"
@@ -1242,10 +1242,11 @@ dynamicEffect:
 # 插入代码到头部 </head> 之前 和 底部 </body> 之前
 inject:
   head:
+    - '<link rel="stylesheet" href="/css/custom.css" />'
     # 自定义css
     # - <link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'">
 
-  bottom:
+  bottom: []
     # 自定义js
     # - <script src="/js/xxx"></script>
 

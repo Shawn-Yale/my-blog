@@ -1,0 +1,5 @@
+/* 隐藏首页顶部大图 */
+body.home .site-cover {
+    display: none !important;
+  }
+  
