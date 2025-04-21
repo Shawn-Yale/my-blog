@@ -35,4 +35,17 @@ More info: [Generating](https://hexo.io/docs/generating.html)
 $ hexo deploy
 ```
 
+```bash
+hexo cl
+hexo g
+hexo s
+```
+
+
+```bash
+git add .
+git commit -m "更新博客内容"
+git push origin main
+```
+
 More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)

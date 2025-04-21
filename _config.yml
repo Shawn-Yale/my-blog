@@ -99,6 +99,13 @@ ignore:
 ## Themes: https://hexo.io/themes/
 theme: anzhiyu
 
+plugins:
+  - hexo-renderer-mathjax
+
+mathjax:
+  enable: true
+  per_page: false
+  
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
