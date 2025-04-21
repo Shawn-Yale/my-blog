@@ -4,8 +4,8 @@
 
 # Site
 title: Shawn Yale
-subtitle: ""
-description: "Shawn Yale"
+subtitle: "Slove more problems!"
+description: "滚去学习! T^T"
 keywords:
 author: Shawn Yale
 language: zh-CN
@@ -105,7 +105,7 @@ plugins:
 mathjax:
   enable: true
   per_page: false
-  
+
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:

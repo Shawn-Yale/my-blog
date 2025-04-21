@@ -75,6 +75,7 @@ author_status:
   # 可以是任何图片，建议放表情包或者emoji图片，效果都很好，[表情包速查](https://emotion.xiaokang.me/)
   statusImg: "https://bu.dusays.com/2023/08/24/64e6ce9c507bb.png"
   skills:
+    - XCPC
     # - 🤖️ 数码科技爱好者
     # - 🔍 分享与热心帮助
     # - 🏠 智能家居小能手
@@ -124,7 +125,7 @@ local_search:
 # MathJax
 mathjax:
   enable: true
-  per_page: false
+  per_page: true
 
 # KaTeX
 katex:
@@ -140,17 +141,18 @@ favicon: /favicon.ico
 
 # Avatar (头像)
 avatar:
-  img: https://bu.dusays.com/2023/04/27/64496e511b09c.jpg
+  img: "/images/leslie.jpg"
   effect: false
 
 # Disable all banner image
 disable_top_img: false
 
 # The banner image of home page
-index_img: false # "background: url() top / cover no-repeat"
+index_img: "background: url('/images/codeforces-icon.png') top / cover no-repeat" 
+# "background: url() top / cover no-repeat"
 
 # If the banner of page not setting, it will show the top_img
-default_top_img: false
+default_top_img: "/images/codeforces-icon.png"
 
 cover:
   # display the cover or not (是否显示文章封面)
@@ -161,7 +163,7 @@ cover:
   # left/right/both
   position: left
   # When cover is not set, the default cover is displayed (当没有设置cover时，默认的封面显示)
-  default_cover:
+  default_cover: "/images/codeforces-icon.png"
     # - /img/default_cover.jpg
 
 # Replace Broken Images (替换无法显示的图片)
