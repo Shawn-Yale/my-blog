@@ -44,7 +44,7 @@ hexo s
 
 ```bash
 git add .
-git commit -m "修改url为shawnyale.netlify.app"
+git commit -m "更新博客内容"
 git push origin main
 ```
 
