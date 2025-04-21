@@ -144,14 +144,13 @@ avatar:
   img: "/images/leslie.jpg"
   effect: false
 
-# Disable all banner image
+# 是否禁用所有 banner 图
 disable_top_img: false
 
-# The banner image of home page
-index_img: "background: url('/images/codeforces-icon.png') top / cover no-repeat" 
-# "background: url() top / cover no-repeat"
+# 首页的 banner 背景图，使用 CSS 格式写法时要注意引号嵌套
+index_img: 'background: url("/images/top_img1.jpg") top / cover no-repeat'
 
-# If the banner of page not setting, it will show the top_img
+# 默认 banner 图片（用于页面未指定 top_img 时）
 default_top_img: "/images/codeforces-icon.png"
 
 cover:
@@ -203,7 +202,7 @@ mainTone:
 # wordcount (字数统计)
 # see https://blog.anheyu.com/posts/c27d.html#字数统计
 wordcount:
-  enable: false
+  enable: true
   post_wordcount: true
   min2read: true
   total_wordcount: true
@@ -226,17 +225,20 @@ anchor: false
 
 # toc (目录)
 toc:
+  # 文章页是否显示 TOC
   post: true
-  page: false
+  # 普通页面是否显示 TOC
+  page: true
+  # 是否显示章节数
   number: true
-  expand: false
+  expand: true
   style_simple: false # for post
 
 post_copyright:
   enable: true
-  decode: false
+  decode: true
   author_href:
-  location: 长沙
+  location: 浙江
   license: CC BY-NC-SA 4.0
   license_url: https://creativecommons.org/licenses/by-nc-sa/4.0/
   avatarSinks: false # hover时头像下沉
@@ -246,7 +248,7 @@ post_copyright:
 
 # Sponsor/reward
 reward:
-  enable: true
+  enable: false
   QR_code:
     - img: https://npm.elemecdn.com/anzhiyu-blog@1.1.6/img/post/common/qrcode-weichat.png
       link:
@@ -429,11 +431,11 @@ crisp:
 footer:
   owner:
     enable: true
-    since: 2020
+    since: 2025
   custom_text:
   runtime:
-    enable: false
-    launch_time: 04/01/2021 00:00:00 # 网站上线时间
+    enable: true
+    launch_time: 04/20/2025 00:00:00 # 网站上线时间
     work_img: https://npm.elemecdn.com/anzhiyu-blog@2.0.4/img/badge/安知鱼-上班摸鱼中.svg
     work_description: 距离月入25k也就还差一个大佬带我~
     offduty_img: https://npm.elemecdn.com/anzhiyu-blog@2.0.4/img/badge/安知鱼-下班啦.svg
@@ -648,7 +650,7 @@ sidebar:
 h2Divider: false
 
 # 表格隔行变色
-table_interlaced_discoloration: false
+table_interlaced_discoloration: true
 
 # 首页双栏显示
 article_double_row: true
