@@ -113,3 +113,25 @@ deploy:
   repo: https://github.com/Shawn-Yale/my-blog.git
   branch: gh-pages
 
+
+envelope_comment:
+  enable: true
+  custom_pic:
+    cover: https://npm.elemecdn.com/hexo-butterfly-envelope/lib/violet.jpg
+    line: https://npm.elemecdn.com/hexo-butterfly-envelope/lib/line.png
+    beforeimg: https://npm.elemecdn.com/hexo-butterfly-envelope/lib/before.png
+    afterimg: https://npm.elemecdn.com/hexo-butterfly-envelope/lib/after.png
+  message:
+    - 有什么想问的？
+    - 有什么想说的？
+    - 有什么想吐槽的？
+    - 哪怕是有什么想吃的，都可以告诉我哦~
+  bottom: 自动书记人偶竭诚为您服务！
+  height: 1024px
+  path: comments
+  front_matter:
+    title: 留言板
+    comments: true
+    top_img: false
+    type: envelope
+
