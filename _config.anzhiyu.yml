@@ -359,7 +359,7 @@ waline:
   # 好像leancloud是存储东西的，具体还不知道干嘛的
   # https://console.leancloud.app/apps/KMbdpFehb6QXYUb5FF9hOeg2-MdYXbMMI/settings/keys
 
-  serverURL: https://waline-e72iugrzc-shawn-yales-projects.vercel.app/
+  serverURL: https://waline-b483cqr8v-shawn-yales-projects.vercel.app/
   # https://waline-7277xx4o3-shawn-yales-projects.vercel.app/ # Waline server address url
   bg: '#f7f8fa' # 浅灰色背景   # Waline background
   pageview: false
