@@ -367,9 +367,9 @@ waline:
   imageUploader: true # 配置为 > 换行后可自定义图片上传逻辑，示例: https://waline.js.org/cookbook/customize/upload-image.html#案例
   # 以下为可选配置，后续若有新增/修改配置参数可在此自行添加/修改
   option:
-    lang: 'zh-CN' # 表示使用简体中文。其他支持的语言有：en, zh-TW, ja, fr, de, ru 等。
+    # lang: 'zh-CN' # 表示使用简体中文。其他支持的语言有：en, zh-TW, ja, fr, de, ru 等。
     reaction: true # 开启“表情反应”功能。在每条评论下方会显示表情按钮，访客可以点击 👍 ❤️ 😂 等表示态度。
-    requiredFields: ['nick'] # 表示必须填写昵称，但不强制填写邮箱、网址等
+    # requiredFields: ['nick'] # 表示必须填写昵称，但不强制填写邮箱、网址等
     # 如果你希望强制昵称+邮箱，则写成：requiredFields: ['nick', 'mail']
 
 
