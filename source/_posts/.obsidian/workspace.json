@@ -1,0 +1,185 @@
+{
+  "main": {
+    "id": "080a1c6cd56cb955",
+    "type": "split",
+    "children": [
+      {
+        "id": "9e57341cf0390ba5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7d121f0b8abaed57",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "状态机模型.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "状态机模型"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "eab50e74fef3b6de",
+    "type": "split",
+    "children": [
+      {
+        "id": "24951902335ed9ea",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "c7eb798f89636702",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "b38365ff25101a1c",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "13e120f95855aed4",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 256.5
+  },
+  "right": {
+    "id": "2198859ec916e189",
+    "type": "split",
+    "children": [
+      {
+        "id": "75bff517f7fc7307",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "e74653d55a3b7722",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "状态机模型.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "状态机模型 的反向链接列表"
+            }
+          },
+          {
+            "id": "72f831faa8233126",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "状态机模型.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "状态机模型 的出链列表"
+            }
+          },
+          {
+            "id": "6cab5b69e1b35288",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "d446824ef20a8da1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "状态机模型.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "状态机模型 的大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
+  "active": "7d121f0b8abaed57",
+  "lastOpenFiles": [
+    "hello-world.md",
+    "线性DP.md",
+    "树形DP.md",
+    "划分型DP与区间DP.md",
+    "二分.md",
+    "测试.md",
+    "期望DP.md",
+    "Tarjan算法-SCC-LCA.md",
+    "数位DP.md",
+    "文章模版.md",
+    "状态机模型.md"
+  ]
+}

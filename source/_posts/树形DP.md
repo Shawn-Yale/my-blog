@@ -1,67 +1,15 @@
 ---
 title: 树形DP
 date: 2025-04-21 15:09:26
-tags: [DP, 树形DP]
-categories: [算法笔记]
+tags:
+  - DP
+  - 树形DP
+categories:
+  - 算法笔记
 mathjax: true
 ---
 
-#### [AcWing 285. 没有上司的舞会](https://www.acwing.com/problem/content/description/287/)
-```cpp
-#include <bits/stdc++.h>
-using namespace std;
-#define endl '\n'
-#define int long long
-#define vi vector<int>
-#define pii pair<int, int>
-#define arr3 array<int, 3>
-#define lowbit(x) (x) & (-x)
-const int N = 6e3 + 10, inf = 0x3f3f3f3f, Inf = INT_MAX, mod = 1e9 + 7;
-int n, happy[N], h[N], e[N], ne[N], vis[N], dp[N][2], idx;
-// vis标记是否有上司, 1 为有上司
-// dp[i][0] 表示这个人不参加 dp[i][1] 表示这个人参加
-
-void add(int a, int b){
-    e[idx] = b;
-    ne[idx] = h[a];
-    h[a] = idx++;
-    return;
-}
-
-void dfs(int u){
-    dp[u][1] = happy[u];
-    for(int i = h[u]; ~i; i = ne[i]){
-        int j = e[i];
-        dfs(j);
-        dp[u][0] += max(dp[j][0], dp[j][1]);
-        dp[u][1] += dp[j][0];
-    }
-}
-
-void solve(){
-    cin >> n;
-    for(int i = 1; i <= n; i++) cin >> happy[i];
-    memset(h, -1, sizeof h);
-    for(int i = 1; i < n; i++){
-        int u, v; cin >> u >> v;
-        add(v, u);
-        vis[u] = 1;
-    }
-    int st = 1;
-    while(vis[st]) st++;
-    dfs(st);
-    cout << max(dp[st][0], dp[st][1]) << endl;
-}
-
-signed main(){
-    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
-    int T = 1;
-    //cin >> T;
-    while(T--) solve();
-    return 0;
-}
-```
-#### [abc394_f. Alkane](https://atcoder.jp/contests/abc394/tasks/abc394_f)
+#### [abc394_f. Alkane](https://atcoder.jp/contests/abc394/tasks/abc394_f)(树形DP)
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
@@ -114,7 +62,7 @@ signed main(){
     return 0;
 }
 ```
-#### [abc397_e. Path Decomposition of a Tree](https://atcoder.jp/contests/abc397/tasks/abc397_e)
+#### [abc397_e. Path Decomposition of a Tree](https://atcoder.jp/contests/abc397/tasks/abc397_e)(树形DP)
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
@@ -279,6 +227,150 @@ void solve(){
     }
     dfs(1, -1);
     cout << ans << endl;
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    //cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
+#### [CF1833G. Ksyusha and Chinchilla](https://codeforces.com/problemset/problem/1833/G)(树形DP)(1800)([与abc397_e类似](https://atcoder.jp/contests/abc397/tasks/abc397_e))
+**提示 1：** 我们要把树拆成一系列组件。请从最容易确定组件的位置开始拆。
+**提示 2：** 上述过程相当于一个树形 DP 。
+简单的贪心。
+我们从叶子出发，这个叶子一定和其父节点在同一个组件中。剩下一个元素呢？
+- 其有可能是另一个叶子，如果这样，其父节点除了这两个子节点外，剩余的子树都应该自己拆分。
+- 其有可能是父节点的父节点，此时，父节点和父节点的父节点的其余子树都应该能够自行拆分为组件。
+- 由于子树的处理与上述过程过程一致，因此可以在子树中不断找到叶子进行上述组件的寻找，直到没有其他连接的子树。在这种情况下，相当于找到了一个大小为 $3$ 的子树，再把它切掉。
+上述逻辑进一步提炼，可以发现，我们从叶子出发不断往根走，贪心地取大小为 $3$ 的子树即满足要求。
+从代码逻辑来看，相当于自叶子往上的 DP，一旦遇到一个当前大小为 $3$ 的子树，就切断其与其父亲之间连的边。
+时间复杂度为 $\mathcal{O}(n)$ .
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+#define vii vector<vi>
+#define pii pair<int, int>
+#define arr3 array<int, 3>
+#define m (2 * n + 10)
+const int N = 1e4 + 10, M = 2e4 + 10, inf = 0x3f3f3f3f, mod = 1e9 + 7, MOD = 998244353;
+int n, idx;
+
+void solve(){
+    cin >> n;
+    idx = 0;
+    vi sz(n + 1, 1), h(n + 1, -1), e(m), ne(m), ans;
+
+    function<void(int, int)> add = [&](int a, int b){
+        e[idx] = b;
+        ne[idx] = h[a];
+        h[a] = idx++;
+    };
+
+    function<void(int, int)> dfs = [&](int u, int fa){
+        for(int i = h[u]; ~i; i = ne[i]){
+            int v = e[i];
+            if(v == fa) continue;
+            dfs(v, u);
+            if(sz[v] == 0) ans.push_back(i);
+            else sz[u] += sz[v];
+        }
+        if(sz[u] == 3) sz[u] = 0;
+    };
+
+    for(int i = 1; i < n; i++){
+        int a, b; cin >> a >> b;
+        add(a, b), add(b, a);
+    }
+
+    dfs(1, -1);
+    
+    if((ans.size() + 1) * 3 == n){
+        cout << ans.size() << endl;
+        // 同一条边加了两次, 所以 0: 0/1  1: 2/3  2: 4/5
+        for(auto &x : ans) cout << x / 2 + 1 << " \n"[x == ans.back()];
+        if(n == 3) cout << endl; // 特判 n == 3
+    }else cout << -1 << endl;
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
+#### [CF743D. Chloe and pleasant prizes](https://codeforces.com/problemset/problem/743/D)(树形DP)(LCA)(1800)(与[CF1083A](https://codeforces.com/problemset/problem/1083/A)类似)
+**提示 1：** 翻译题目：找到以 $1$ 为根的有根树的两个不交子树的最大权值和。
+**提示 2：** 一定能找到一个点，使得我们选取的树都在这个点对应的不同的子树内。对这个点而言，选取最大的两个子树即可。
+**提示 3：** 如何维护某个点对应的最大子树。
+如果你没看懂题的话，请先看提示 1 的题意。
+怎么找到两个不交的子树呢？
+考虑两个不交的子树，其根节点往整棵树的根节点不断延申，一定会汇集到一个点（即 LCA，lowest common ancestor），则对于 LCA 对应的子树而言，这两棵子树也在 LCA 连出的不同的子树内。
+于是，只需对于 LCA 连出的不同的子树分别求最大子树和，再选取最大的两个相加即可。
+而只需枚举所有可能的 LCA 即可覆盖所有的子树对。
+接下来便只有一件事：如何维护一棵树内的最大子树和。
+首先，维护一棵子树内的权值和，直接使用树形 DP 即可，用所有子树的结果相加再加上根节点。
+而同时最大子树和等于各个子树的最大子树和与整棵树的和取最大值。因此也可以树形 DP 维护。
+综上，使用树形 DP 完成最大子树和的维护，再枚举 LCA ，对于每个 LCA 选取所有儿子中最大的两个子树和即可。
+时间复杂度为 $\mathcal{O}(n)$ 。
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+const int N = 2e5 + 10, M = 4e5 + 10, inf = 0x3f3f3f3f, mod = 1e9 + 7;
+const int INF = 0x3f3f3f3f3f3f3f3f, MOD = 998244353;
+int n, a[N], h[N], e[M], ne[M], idx;
+int sum_subtree[N], dp[N], ans = -INF;
+// sum_subtree[i]: 以 i 为根的整棵子树的权值和。
+// dp[i]: 以 i 为根的子树中，权值和最大的某棵子树的值。
+
+void add(int a, int b){
+    e[idx] = b;
+    ne[idx] = h[a];
+    h[a] = idx++;
+}
+
+void dfs(int u, int fa){
+    sum_subtree[u] = a[u];
+    for(int i = h[u]; ~i; i = ne[i]){
+        int v = e[i];
+        if(v == fa) continue;
+        dfs(v, u);
+        sum_subtree[u] += sum_subtree[v];
+    }
+    dp[u] = sum_subtree[u];
+    int bst1 = -INF, bst2 = -INF;
+    for(int i = h[u]; ~i; i = ne[i]){
+        int v = e[i];
+        if(v == fa) continue;
+        if(dp[v] >= bst1){
+            bst2 = bst1;
+            bst1 = dp[v];
+        }else if(dp[v] > bst2) bst2 = dp[v];
+        dp[u] = max(dp[u], dp[v]);
+    }
+    if(bst2 > -INF) ans = max(ans, bst1 + bst2);
+}
+
+void solve(){
+    memset(h, -1, sizeof h);
+    cin >> n;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    for(int i = 1; i < n; i++){
+        int u, v; cin >> u >> v;
+        add(u, v); add(v, u);
+    }
+    dfs(1, 0);
+    if(ans > -INF) cout << ans << endl;
+    else cout << "Impossible" << endl;
 }
 
 signed main(){

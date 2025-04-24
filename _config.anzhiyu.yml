@@ -10,7 +10,7 @@ menu:
     留言板: /comments/ || anzhiyu-icon-envelope
 
   我的:
-    音乐馆: /music/ || anzhiyu-icon-music
+    音乐馆: /music/?id=1708664797&server=tencent || anzhiyu-icon-music
     追番页: /bangumis/ || anzhiyu-icon-bilibili
     相册集: /album/ || anzhiyu-icon-images
     小空调: /air-conditioner/ || anzhiyu-icon-fan
@@ -847,7 +847,6 @@ aside:
   card_announcement:
     enable: true
     content: |
-      预计将于明日(4.23日)晚上转移网站到 www.shawnyale.top。
       目前还处于网站搭建时期, 预计下周开始正常更新。
   card_weixin:
     enable: false
