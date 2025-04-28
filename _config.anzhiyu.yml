@@ -847,7 +847,7 @@ aside:
   card_announcement:
     enable: true
     content: |
-      目前还处于网站搭建时期, 预计下周开始正常更新。
+      尽量保持一天 1~2 场比赛的更新频率, 周五(杭电比赛)周日(整理题目)可能不更。
   card_weixin:
     enable: false
     face: https://bu.dusays.com/2023/01/13/63c02edf44033.png
