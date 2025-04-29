@@ -253,7 +253,7 @@ signed main(){
     return 0;
 }
 ```
-## [G. Shorten the Array](https://codeforces.com/contest/2093/problem/g)(01Trie)(需要复习！)
+## [G. Shorten the Array](https://codeforces.com/contest/2093/problem/g)(01Trie)
 **看到𝑏𝑖 ⊕ 𝑏𝑗 >= k 就要想到 01Trie**
 ```cpp
 #include <bits/stdc++.h>

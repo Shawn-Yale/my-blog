@@ -1,5 +1,5 @@
 ---
-title: Codeforces Round 1020 (Div.3)
+title: Codeforces Round 1020 (Div. 3)
 date: 2025-04-28 19:03:58
 tags:
   - Codeforces

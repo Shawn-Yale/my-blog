@@ -133,3 +133,55 @@ signed main(){
     return 0;
 }
 ```
+
+## [CF2104E. Unpleasant Strings](https://codeforces.com/contest/2104/problem/e)(DP)
+**经过分析，我们需要快速知道:**
+1. 字符串 `t` 是 `s` 的前几个字符的子序列
+2. 从 `s` 的第 `i` 个字符开始，需要加几个字符，可以使 `i` 跳到 `n+1`
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+#define vii vector<vi>
+const int inf = 0x3f3f3f3f;
+int n, k, q, lst[30];
+string s, t;
+
+// nxt_id[i][j]: 第 i 个字符之后的第一个字符 j 的出现位置
+// dp[i]: 若前 i 个字符与字符串已经完全匹配，则还需要增加几个字符
+
+void solve(){
+    cin >> n >> k >> s >> q;
+    s = " " + s;
+    vii nxt_id(n + 2, vi(k, 0));
+    for(int i = 0; i < k; i++) nxt_id[n + 1][i] = n + 1, lst[i] = n + 1;
+    vi dp(n + 2, inf);
+    dp[n + 1] = 0;
+	// 循环到 0 后，可以从 0 直接找到字符串的第一个字符 (通过 nxt_id[0][ch]);
+    for(int i = n; i >= 0; i--){
+        for(int j = 0; j < k; j++){
+            nxt_id[i][j] = lst[j];
+            dp[i] = min(dp[i], dp[nxt_id[i][j]] + 1);
+        }
+        if(i != 0) lst[s[i] - 'a'] = i;
+    }
+    
+    while(q--){
+        cin >> t;
+        int id = 0;
+        for(int i = 0; i < t.size(); i++)
+            id = nxt_id[id][t[i] - 'a'];
+        cout << dp[id] << endl;
+    }
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    //cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
