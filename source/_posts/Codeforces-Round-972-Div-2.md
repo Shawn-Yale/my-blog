@@ -1,5 +1,5 @@
 ---
-title: Codeforces Round 972 (Div. 2)
+title: Codeforces Round 972 (Div.2)
 date: 2025-04-28 22:12:43
 tags:
   - Codeforces
