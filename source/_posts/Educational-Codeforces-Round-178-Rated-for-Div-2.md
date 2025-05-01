@@ -149,6 +149,7 @@ const int inf = 0x3f3f3f3f;
 int n, k, q, lst[30];
 string s, t;
 
+// lst[i]: 字符 'a'+i 上次出现的位置
 // nxt_id[i][j]: 第 i 个字符之后的第一个字符 j 的出现位置
 // dp[i]: 若前 i 个字符与字符串已经完全匹配，则还需要增加几个字符
 
