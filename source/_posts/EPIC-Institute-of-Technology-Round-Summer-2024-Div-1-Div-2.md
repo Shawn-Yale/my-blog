@@ -93,7 +93,7 @@ signed main(){
 }
 ```
 
-## [CF1987D. World is Mine](https://codeforces.com/contest/1987/problem/D)(背包)(1800)(有点阴间了)
+## [CF1987D. World is Mine](https://codeforces.com/contest/1987/problem/D)(博弈论)(背包)(1800)(有点阴间了)
 ### 一、问题回顾
 - 有 $n$ 个蛋糕，第 $i$ 个蛋糕有美味值 $a_i$。  
 - Alice 和 Bob 轮流吃，Alice 先手：  
@@ -175,7 +175,7 @@ void dfs(int u){
         for(int i = 1; i <= dep[v]; i++){
             dp[u][i + 1] += dp[v][i];
             dp[u][i + 1] = min(dp[u][i + 1], INF);
-			// 取 min, 将最大值截断为INF, 防止爆long long
+            // 取 min, 将最大值截断为INF, 防止爆long long
         }
         sum += a[v];
     }
