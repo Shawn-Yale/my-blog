@@ -62,3 +62,34 @@ signed main(){
     return 0;
 }
 ```
+
+## [CF2108B. SUMdamental Decomposition](https://codeforces.com/contest/2108/problem/B)(位运算)(模拟)
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+int n, x, cnt;
+
+void solve(){
+    cin >> n >> x;
+    cnt = __builtin_popcountll(x);
+    if(n == 1 && x == 0) cout << -1 << endl;
+    else if(n <= cnt) cout << x << endl;
+    else{
+        n -= cnt;
+        if(n & 1){
+            if(x <= 1) cout << x + n + 3 << endl;
+            else cout << x + n + 1 << endl;
+        }else cout << x + n << endl;
+    }
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
