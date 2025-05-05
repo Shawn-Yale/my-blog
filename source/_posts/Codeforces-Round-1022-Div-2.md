@@ -164,7 +164,7 @@ void solve(){
         // 把两边都符合的点删去
             vec.emplace_back(i + 1);
     vec.emplace_back(n - k + 1);
-    // 加入 k, n-l+1两个点，确保存在二分有解
+    // 加入 k, n-k+1两个点，确保存在二分有解
 
     l = 0, r = vec.size() - 2;
     while(l < r){
