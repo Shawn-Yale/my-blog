@@ -77,7 +77,7 @@ signed main(){
 - 中、右区间满足 `median <= k`
 其中 第一种情况 和 第三种情况 类似，只需反转整个数组再求一次即可
 第二种情况讨论也比较简单
-对于第一种情况和第三种情况的判断，可以观看[视频](https://www.bilibili.com/video/BV1oe5dzqEbp?spm_id_from=333.788.player.switch&vd_source=f0489718ccab992000c983a006bde4a5&p=4)理解数形结合的方法
+对于第一种情况和第三种情况的判断，可以观看[视频](https://www.bilibili.com/video/BV1oe5dzqEbp?spm_id_from=333.788.videopod.sections&vd_source=f0489718ccab992000c983a006bde4a5&p=3)理解数形结合的方法
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;

@@ -847,7 +847,6 @@ aside:
   card_announcement:
     enable: true
     content: |
-      五一快乐🎉!
       尽量保持一天 1~2 场比赛的更新频率, 周日(整理题目)可能不更。
   card_weixin:
     enable: false
