@@ -122,7 +122,8 @@ signed main(){
 }
 ```
 
-## [CF2107C. Maximum Subarray Sum](https://codeforces.com/contest/2107/problem/C)
+## [CF2107C. Maximum Subarray Sum](https://codeforces.com/contest/2107/problem/C)(DP)
+可以先看下方的例题，复习一下`Kadane算法`
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
@@ -185,12 +186,12 @@ signed main(){
 对于**常规的最大子数组的区间和**，我们可以使用 `Kadane算法`以 $\mathcal{O}(n)$的时间复杂度快速求解
 **思路如下：**
 - 维护两个变量：
-    - `cur`：以当前位置结尾的“当前最大子段和”，
-    - `best`：到目前为止见过的“全局最大子段和”。
+    - `cur_max`：以当前位置结尾的“当前最大子段和”，
+    - `mx`：到目前为止见过的“全局最大子段和”。
 - 遍历 $i = 1...n$：
-    1. `cur = max(cur + a[i], a[i])`  
+    1. `cur_max = max(cur_max + a[i], a[i])`  
         —— 要么把当前元素接在前面子段上，要么从当前元素重新开一段。
-    2. `best = max(best, cur)`  
+    2. `mx = max(mx, cur_max)`  
         —— 更新全局最优。
 **下面是一道例题：**
 ### [CF327A. Flipping Game](https://codeforces.com/problemset/problem/327/A)(Kadane算法)(DP)
