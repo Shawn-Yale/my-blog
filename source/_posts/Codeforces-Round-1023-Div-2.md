@@ -235,7 +235,7 @@ void solve(){
         cur_max = max(cur_max + a[i], a[i]);
         mx = max(mx, cur_max);
     }
-    // 答案就是 原来的1的个数 + 区间就打贡献
+    // 答案就是 原来的1的个数 + 区间最大贡献
     cout << cnt + mx << endl;
 }
 
