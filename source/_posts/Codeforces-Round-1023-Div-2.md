@@ -129,57 +129,49 @@ using namespace std;
 #define endl '\n'
 #define int long long
 #define vi vector<int>
-int n, k, pre;
+const int inf = 1e18;
+int n, k;
 string s;
-bool flag;
+
+int get_mx(const vi &a){
+    int cur_max = a[0], mx = a[0];
+    for(int i = 1; i < n; i++){
+        cur_max = max(cur_max + a[i], a[i]);
+        mx = max(mx, cur_max);
+    }
+    return mx;
+};
 
 void solve(){
-    cin >> n >> k;
-    cin >> s;
+    cin >> n >> k >> s;
     vi a(n);
-    for(int &x : a) cin >> x;
-    pre = 0;
-    flag = false;
     for(int i = 0; i < n; i++){
-        if(s[i] == '0') pre = 0;
-        else{
-            pre = max(pre, 0ll) + a[i];
-            if(pre > k) return void(cout << "No" << endl);
-            else if(pre == k) flag = true;
-        }
+        cin >> a[i];
+        if(s[i] == '0') a[i] = -inf;
     }
-    if(s.find('0') == string::npos){
-        if(flag){
+    int mx = get_mx(a);
+    if(mx > k) return void(cout << "No" << endl);
+    // 如果已经超过 k，没法“凑小”，直接无解
+    int pos = s.find('0');
+    if(pos == -1){
+        // 考虑全都是'1'的特殊情况：只能看 res 是否恰好等于 k
+        if(mx == k){
             cout << "Yes" << endl;
             for(int i = 0; i < n; i++)
                 cout << a[i] << " \n"[i == n - 1];
         }else cout << "No" << endl;
-        return;
+    }else{
+        // 找到第一个'0'的坐标 pos
+        a[pos] = inf;
+        // 求`pos+两侧合法区间`的总区间的区间最大子数组和mx
+        // 只需要从 a[pos] 中扣除 `mx 比 k 多的数值`
+        // 最终的最大子数组和就恰好为 k
+        mx = get_mx(a);
+        a[pos] -= (mx - k);
+        cout << "Yes" << endl;
+        for(int i = 0; i < n; i++)
+            cout << a[i] << " \n"[i == n - 1]; 
     }
-    for(int i = 0; i < n; i++){
-        if(s[i] == '0'){
-            int l = i - 1, r = i + 1;
-            int cur = 0, l_max = 0, r_max = 0;
-            while(l >= 0 && s[l] == '1'){
-                cur += a[l--];
-                l_max = max(l_max, cur);
-            }
-            cur = 0;
-            while(r < n && s[r] == '1'){
-                cur += a[r++];
-                r_max = max(r_max, cur);
-            }
-            cout << "Yes" << endl;
-            for(int j = 0; j < n; j++){
-                if(s[j] == '0')
-                    cout << (j == i ? k - l_max - r_max : (int)-1e18);
-                else cout << a[j];
-                cout << " \n"[j == n - 1];
-            }
-            return;
-        }
-    }
-    cout << "No" << endl;
 }
 
 signed main(){
