@@ -154,7 +154,7 @@ void solve(){
     // 如果已经超过 k，没法“凑小”，直接无解
     int pos = s.find('0');
     if(pos == -1){
-        // 考虑全都是'1'的特殊情况：只能看 res 是否恰好等于 k
+        // 考虑全都是'1'的特殊情况：只能看 mx 是否恰好等于 k
         if(mx == k){
             cout << "Yes" << endl;
             for(int i = 0; i < n; i++)
