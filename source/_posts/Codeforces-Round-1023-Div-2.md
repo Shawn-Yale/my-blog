@@ -393,7 +393,6 @@ using namespace std;
 #define vi vector<int>
 #define arr3 array<int, 3>
 
-
 void solve(){
     int n; cin >> n;
     int idx = 0;
@@ -432,7 +431,7 @@ void solve(){
     };
 
     function<void(int)> work = [&](int x){
-        // 找到子树的端点 a, b
+        // 找到子树直径的端点 a, b
         int a = bfs(x);
         int b = bfs(a);
         ans.push_back({dis[b] + 1, max(a, b) + 1, min(a, b) + 1});
@@ -474,3 +473,27 @@ signed main(){
     return 0;
 }
 ```
+**Doing:**
+
+## [CF2107E. Ain and Apple Tree](https://codeforces.com/contest/2107/problem/E)(构造)(贪心)(数学)
+**一、关键观察**
+1. **权重定义**
+	树的权重定义为：$\displaystyle \sum_{1 \le i < j \le n} \mathrm{dep}\bigl(\mathrm{lca}(i,j)\bigr)$
+	其中 $\mathrm{dep}(x)$ 是从根节点 1 到节点 $x$ 的边数，也就是节点$x$的深度。
+2. **极端情况**
+	* **星形树**（所有节点都连到 1）：此时任意两叶子的 LCA 均为根，$\mathrm{dep}(1)=0$，所以权重为 0。
+	* **链状树**（$1-2-3-\cdots-n$）：此时权重可证为：$\displaystyle \sum_{d=1}^{n-1}(n-d)(d-1) = \frac{(n-1)n(n-2)}{6}.$
+		这是所有 n 节点树中权重的最大值，记作 $\mathtt{cur_{\max}}$。
+        **下面证明：** $\displaystyle \sum_{d=1}^{n-1}(n-d)(d-1) = \frac{(n-1)n(n-2)}{6}.$
+        我们令：$\displaystyle S = \sum_{d=1}^{n-1} (n-d)(d-1).$
+        **做一下变形：** 
+            令 $k=d-1$，于是：
+            $\displaystyle S \ =\ \sum_{k=0}^{n-2}\bigl[(n-1)-k\bigr]k =\sum_{k=0}^{n-2}\bigl((n-1)k - k^2\bigr) =(n-1)\sum_{k=0}^{n-2}k-\sum_{k=0}^{n-2}k^2.$
+
+        **我们分别计算这两项：**
+        1. $\displaystyle \sum_{k=0}^{n-2}k = 0+1+\cdots+(n-2) = \frac{(n-2)(n-1)}{2}.$
+
+        2. 首先有经典的平方和公式：$\displaystyle \sum_{k=1}^{m} k^2 =\frac{m(m+1)(2m+1)}{6}.$
+            所以：$\displaystyle \sum_{k=0}^{n-2}k^2 = 0^2+1^2+\cdots+(n-2)^2 = \frac{(n-2)(n-1)(2n-3)}{6}.$
+        
+        **将它们代回去：** $\displaystyle S=(n-1)\frac{(n-2)(n-1)}{2}-\frac{(n-2)(n-1)(2n-3)}{6}=\frac{n(n-1)(n-2)}{6}.$
