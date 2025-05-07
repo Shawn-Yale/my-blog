@@ -848,7 +848,7 @@ aside:
     enable: true
     content: |
       尽量保持一天 1~2 场比赛的更新频率, 周日(整理题目)可能不更。
-      周三补 cf round 2023 的D、F1两题以及 Kadane的各种应用
+
   card_weixin:
     enable: false
     face: https://bu.dusays.com/2023/01/13/63c02edf44033.png

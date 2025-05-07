@@ -355,3 +355,122 @@ signed main(){
     return 0;
 }
 ```
+## [CF2107D. Apple Tree Traversing](https://codeforces.com/contest/2107/problem/D)(树的直径)(BFS)
+**题目思路：**
+我们要在一棵 `n` 个节点的树上，反复摘取「苹果路径」（路径上的所有节点都有苹果），将其记为三元组 `(d,u,v)` 并摘走，直到树上无苹果。目标是让纸上写下的数字序列在 **字典序** 上尽可能大。
+
+**关键观察：**
+1. 每一步，我们如果能摘到 **尽可能长** 的路径，三元组中的第一个数 `d` 最大，绝对能在字典序上占优。
+2. 当可选的最长路径存在多条时，我们希望第二、三个数字 `(u,v)` 组成的对在字典序上也尽可能大；题目定义输出时用的是 `(d, max(u,v), min(u,v))`，我们同样沿用这个约定。
+3. 树上任意两点间最长简单路径就是树的 **直径**。因此，在当前剩余苹果形成的（连通）子树里，摘取这棵子树的直径，就是当前最优操作。
+4. 摘掉直径路径上的所有节点后，原子树会分裂成若干棵相互独立的子树。对每棵子树重复上述操作，最终就能覆盖所有苹果。
+5. 按照上述方式收集到的所有三元组，**排序为字典序降序**（`std::greater`），即可得到整个序列最优的拼接。（因为各个子树之间的操作先后顺序其实可以任意调整，排序保证了全局最优）。
+
+**具体实现细节：**
+- 用 `vis[]` 数组标记已摘苹果的节点，等价于从树上删除该节点；
+- 在一个子树（由 `vis[]` 划分出的连通分量）中，选一个任意节点 `x`，做两次 BFS：
+    1. 从 `x` 出发找最远点 `a`（如果距离相同，选编号大的）；
+    2. 再从 `a` 出发找最远点 `b`（同样距离相同选编号大的）。  
+        这对 `(a,b)` 就是这棵子树的 **「最大直径端点对」**，其路径长度即为 `d = dis[b] + 1`。
+- 将这条路径上的所有节点 `vis[i]=true`，并记录三元组 `(d, max(a,b)+1, min(a,b)+1)`（+1 是因为输入是 1~n）到答案列表 `ans`。
+- 对路径上每个节点 `i`，遍历它的邻居 `x`，如果 `x` 还没被摘（`!vis[x]`），则用递归对以 `x` 为「起始节点」的子树继续做同样操作。
+- 最终所有子树都处理完后，把 `ans` 排序并输出，即可获得所求的序列。
+
+**时间复杂度分析：**
+1. **BFS 求直径并递归分治**
+    - 每次 `work(x)` 调用里，我们做两次 BFS，复杂度各是 O(当前连通块节点数 + 边数)；
+    - 摘除直径路径后，整个树被分成若干互不重叠的子块，递归仅在这些子块上继续做 BFS。
+    - 关键在于：**每个节点、每条边都至多被某次 BFS 访问一次**（因为一旦节点被 `vis` 标记，就永远不再进入后续的 BFS），因此所有递归里 BFS 的总代价是
+        $\mathcal{O}{(∑(节点数+边数))} = \mathcal{O}{(n+(n−1))} = \mathcal{O}{(n)}.$
+2. **结果三元组排序**
+    - 我们总共会产生至多 $3n$ 个数字，即 $\le n$ 组三元组，排序这些三元组需要 $\mathcal{O}{(nlog⁡n)}$。
+3. **综上：** 每个测试用例的总时间复杂度：$\mathcal{O}{(nlog⁡n)}$
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+#define arr3 array<int, 3>
+
+
+void solve(){
+    int n; cin >> n;
+    int idx = 0;
+    vi h(n, -1), e(2 * n), ne(2 * n), vis(n, 0), dis(n), fa(n);
+    vector<arr3> ans;
+
+    auto add = [&](int a, int b){
+        e[idx] = b;
+        ne[idx] = h[a];
+        h[a] = idx++;
+        return;
+    };
+
+    auto bfs = [&](int x){ // 从节点 x 出发，找最远点（编号大的优先）
+        vi q;
+        dis[x] = 0;
+        fa[x] = -1;
+        q.emplace_back(x);
+        for(int i = 0; i < q.size(); i++){
+            int u = q[i];
+            for(int j = h[u]; ~j; j = ne[j]){
+                int v = e[j];
+                if(!vis[v] && v != fa[u]){
+                    dis[v] = dis[u] + 1;
+                    fa[v] = u;
+                    q.emplace_back(v);
+                }
+            }
+        }
+        // 在 bfs 遍历完的节点中，找距离最大的；距离相同则取编号更大
+        int ans = x;
+        for(int v : q)
+            if(dis[v] > dis[ans] || (dis[v] == dis[ans] && v > ans))
+                ans = v;
+        return ans;
+    };
+
+    function<void(int)> work = [&](int x){
+        // 找到子树的端点 a, b
+        int a = bfs(x);
+        int b = bfs(a);
+        ans.push_back({dis[b] + 1, max(a, b) + 1, min(a, b) + 1});
+        int cur = b;
+        while(~cur){
+            // 从 b 走到 a, 标记已摘走
+            vis[cur] = 1;
+            cur = fa[cur];
+        }
+        cur = b;
+        while(~cur){
+            // 对路径上每个节点，检查其相邻未摘节点，以它们为根继续递归
+            for(int i = h[cur]; ~i; i = ne[i]){
+                int to = e[i];
+                if(!vis[to]) work(to);
+            }
+            cur = fa[cur];
+        }
+    };
+
+    for(int i = 1; i < n; i++){
+        int u, v; cin >> u >> v;
+        u--, v--;
+        add(u, v), add(v, u);
+    }
+    work(0);
+    sort(ans.begin(), ans.end(), greater<>());
+    for(int i = 0; i < ans.size(); i++){
+        auto [d, u, v] = ans[i];
+        cout << d << " " << u << " " << v << " \n"[i == ans.size() - 1];
+    }
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
