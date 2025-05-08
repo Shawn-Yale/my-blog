@@ -520,8 +520,8 @@ signed main(){
 既然星形是 0，链状是 $mx$，而题目允许偏差 1，因此只要能构造一个权重在区间 $[k-1,k+1]$ 内的树即可。我们直接从“**最大权重的链状树**”出发，**逐步减小**它的权重，直到落在允许区间。
 **减重操作**： 将链上编号为 $i$ 的节点（初始深度为 $i-1$）从原来挂在 $i-1$ 上，改为挂在 $i-d$ 上，则它的深度从 $i-1$ 变为 $i - d$。**画图模拟一下就可以知道**：合计减少的权重(对 $weight$ 贡献)是 $\displaystyle (0+1+2+..+(d-2)+(d-1)) =\frac{d(d-1)}2 = \binom{d}{2}$.
 **考虑极端状态：** 节点1 下方的节点都挂载到节点 1上，对于答案的贡献为：$\displaystyle \binom{n-1}{2}+ \binom{n-2}{2} \cdots+ \binom{1}{2} = \binom{n}{3}$，此时树的权重为$\displaystyle mx - \binom{n}{3} = 0$
-**我们又可以用归纳法证明：** 把 $\displaystyle \binom{n}{3}$ 拆成 $\displaystyle \binom{n-1}{2},\,\binom{n-2}{2},\dots,1,0$
-就好比有一组“面额”分别为 $\displaystyle \binom{n-1}{2},\,\binom{n-2}{2},\dots,1,0$的硬币。我们要付出恰好 $\Delta$（其中 $\displaystyle 0\le\Delta\le\binom{n}{3}$）的“账单”，恰好可以用这些硬币做**一次不重用**的凑数。
+**我们又可以用归纳法证明：** 把 $\displaystyle \binom{n}{3}$ 拆成 $\displaystyle \binom{n-1}{2}, \binom{n-2}{2},\dots,1,0$
+就好比有一组“面额”分别为 $\displaystyle \binom{n-1}{2}, \binom{n-2}{2},\dots,1,0$的硬币。我们要付出恰好 $\Delta$（其中 $\displaystyle 0\le\Delta\le\binom{n}{3}$）的“账单”，恰好可以用这些硬币做**一次不重用**的凑数。
 更关键的是，这组面额满足“贪心可行”的性质：
 * 每次拿**当前能拿的最大面额**$\displaystyle \binom{d}{2}\le\Delta$ ，都不会导致“凑不下去”的死角；
 * 拿完一枚后，就把那枚硬币“去掉”（在代码里相当于把 d 减一），剩余的面额依然能用贪心法继续凑；

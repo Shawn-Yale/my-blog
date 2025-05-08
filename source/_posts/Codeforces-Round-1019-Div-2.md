@@ -129,3 +129,80 @@ signed main(){
     return 0;
 }
 ```
+
+## [CF2103D. Local Construction](https://codeforces.com/contest/2103/problem/D)(双指针)(构造题)
+**问题回顾：**
+对于一个长度为 $n$ 的排列 $p$，它会经历如下交替删除过程，直到只剩一个元素：
+1. **奇数轮（操作 1）**：删除所有 **非局部最小** 的元素；
+2. **偶数轮（操作 2）**：删除所有 **非局部最大** 的元素。
+
+对于每个位置 $i$，已知它在第 $a_i$ 轮被删除（若永不被删除则 $a_i=-1$）。要构造一个满足这些删除轮次的排列 $p$。
+
+**做题思路：**
+1. **唯一幸存者**
+	题目保证最终只剩一个元素，对应唯一一个 $a_i=-1$。我们把它标记为 `p0`，它会一直留到最后。
+2. **维护当前“存活”下标集合**
+	我们用一个向量 `cur` 存放当前还没被删掉的下标。初始时 `cur = [0,1,…,n-1]`。
+3. **左右指针分配数值**
+	我们准备把 $1\sim n$ 这 $n$ 个数分给各位置，使用两个指针 `l=1`（最小可用数）和 `r=n`（最大可用数）。
+	* 如果第 $t$ 轮是 **奇数**，要删非局部最小——让它们“够大”就不可能是最小，于是给这些要删的位置分配 **大端** 的数（从 `r` 向左用）；
+	* 如果第 $t$ 轮是 **偶数**，要删非局部最大——让它们“够小”就不可能是最大，于是给这些要删的位置分配 **小端** 的数（从 `l` 向右用）。
+4. **左右两侧依次处理**
+	在一轮中，被删的元素相对于幸存者 `p0` 分为 **左侧** 和 **右侧**，无论先左后右还是先右后左，效果一致。
+	* 我们先在 `cur` 中找到 `p0` 的位置 `pos`
+	* 然后扫描 `cur[0..pos-1]`，再扫描 `cur[pos+1..end]`，凡是 $a_i == t$ 的都取数并记录；
+	* 扫描结束后，从 `cur` 中剔除所有 $a_i==t$，进入下一轮。
+5. **结束时给幸存者排数**
+	当 `cur` 只剩下一个下标时，赋给它唯一剩下的数 `l`（此时 `l==r`）。
+
+因为每一轮至多剩下原来的一半元素，所以最多 $\lceil\log_2 n\rceil$ 轮后终止。
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+int n, l, r, p0;
+// p0: a[i] = -1的 i 下标
+
+void solve(){
+    cin >> n;
+    vi a(n), ans(n), cur(n);
+    // cur: 保存当前还“存活”的元素下标，初始为 0..n-1(iota)
+    for(int i = 0; i < n; i++){
+        cin >> a[i];
+        if(a[i] == -1) p0 = i;
+    }
+    l = 1, r = n;
+    iota(cur.begin(), cur.end(), 0ll);
+    for(int t = 1; cur.size() > 1; t++){
+        int pos = find(cur.begin(), cur.end(), p0) - cur.begin();
+        // 找到幸存者 p0 在 cur 中的位置 pos
+        for(int i = 0; i < pos; i++)
+            if(a[cur[i]] == t)
+                ans[cur[i]] = (t & 1 ? r-- : l++);
+        for(int i = cur.size() - 1; i > pos; i--)
+            if(a[cur[i]] == t)
+                ans[cur[i]] = (t & 1 ? r-- : l++);
+        vi tmp;
+        tmp.reserve(cur.size());
+        // 预留空间，减少emplace_back开销，但是未赋值，tmp[i]无意义
+        for(int x : cur)
+            if(a[x] != t)
+                tmp.emplace_back(x);
+        cur.swap(tmp); // 完全交换两个数组
+    }
+    ans[cur[0]] = l;
+    for(int i = 0; i < n; i++)
+        cout << ans[i] << " \n"[i == n - 1];
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
