@@ -475,15 +475,31 @@ signed main(){
 ```
 **Doing:**
 
-## [CF2107E. Ain and Apple Tree](https://codeforces.com/contest/2107/problem/E)(构造)(贪心)(数学)
+## [CF2107E. Ain and Apple Tree](https://codeforces.com/contest/2107/problem/E)(数学)(贪心)(构造题)
 **一、关键观察**
 1. **权重定义**
 	树的权重定义为：$\displaystyle \sum_{1 \le i < j \le n} \mathrm{dep}\bigl(\mathrm{lca}(i,j)\bigr)$
 	其中 $\mathrm{dep}(x)$ 是从根节点 1 到节点 $x$ 的边数，也就是节点$x$的深度。
 2. **极端情况**
 	* **星形树**（所有节点都连到 1）：此时任意两叶子的 LCA 均为根，$\mathrm{dep}(1)=0$，所以权重为 0。
-	* **链状树**（$1-2-3-\cdots-n$）：此时权重可证为：$\displaystyle \sum_{d=1}^{n-1}(n-d)(d-1) = \frac{(n-1)n(n-2)}{6}.$
-		这是所有 n 节点树中权重的最大值，记作 $\mathtt{cur_{\max}}$。
+	* **链状树**（$1-2-3-\cdots-n$）：
+
+        | 节点编号 | LCA depth | LCA pair count |
+        |----------|-----------|----------------|
+        | 1        |     0     |       n-1       |
+        | 2        |     1     |       n-2      |
+        | 3        |     2     |       n-3      |
+        | 4        |     3     |       n-4      |
+        | .        |     .     |        .       |
+        | .        |     .     |        .       |
+        | .        |     .     |        .       |
+        | n-3      |    n-4    |        3       |
+        | n-2      |    n-3    |        2       |
+        | n-1      |    n-2    |        1       |
+        | n        |    n-1    |        0       |
+
+        此时权重可证为：$\displaystyle weight_{max} = \sum_ \ (paircount)(depth) = \sum_{d=1}^{n-1}(n-d)(d-1) = \frac{(n-1)n(n-2)}{6}.$
+		这是所有 n 节点树中权重的最大值，记作 $mx$。
         **下面证明：** $\displaystyle \sum_{d=1}^{n-1}(n-d)(d-1) = \frac{(n-1)n(n-2)}{6}.$
         我们令：$\displaystyle S = \sum_{d=1}^{n-1} (n-d)(d-1).$
         **做一下变形：** 
@@ -497,3 +513,55 @@ signed main(){
             所以：$\displaystyle \sum_{k=0}^{n-2}k^2 = 0^2+1^2+\cdots+(n-2)^2 = \frac{(n-2)(n-1)(2n-3)}{6}.$
         
         **将它们代回去：** $\displaystyle S=(n-1)\frac{(n-2)(n-1)}{2}-\frac{(n-2)(n-1)(2n-3)}{6}=\frac{n(n-1)(n-2)}{6}.$
+3. **可行性判断**
+	由于我们最终允许 $|\mathrm{weight}-k|\le1$，所以如果 $k > mx+1$，那么连最大可能的链状树都不满足题意，必然无解。
+
+**二、构造思路**
+既然星形是 0，链状是 $mx$，而题目允许偏差 1，因此只要能构造一个权重在区间 $[k-1,k+1]$ 内的树即可。我们直接从“**最大权重的链状树**”出发，**逐步减小**它的权重，直到落在允许区间。
+**减重操作**： 将链上编号为 $i$ 的节点（初始深度为 $i-1$）从原来挂在 $i-1$ 上，改为挂在 $i-d$ 上，则它的深度从 $i-1$ 变为 $i - d$。**画图模拟一下就可以知道**：合计减少的权重(对 $weight$ 贡献)是 $\displaystyle (0+1+2+..+(d-2)+(d-1)) =\frac{d(d-1)}2 = \binom{d}{2}$.
+**考虑极端状态：** 节点1 下方的节点都挂载到节点 1上，对于答案的贡献为：$\displaystyle \binom{n-1}{2}+ \binom{n-2}{2} \cdots+ \binom{1}{2} = \binom{n}{3}$，此时树的权重为$\displaystyle mx - \binom{n}{3} = 0$
+**我们又可以用归纳法证明：** 把 $\displaystyle \binom{n}{3}$ 拆成 $\displaystyle \binom{n-1}{2},\,\binom{n-2}{2},\dots,1,0$
+就好比有一组“面额”分别为 $\displaystyle \binom{n-1}{2},\,\binom{n-2}{2},\dots,1,0$的硬币。我们要付出恰好 $\Delta$（其中 $\displaystyle 0\le\Delta\le\binom{n}{3}$）的“账单”，恰好可以用这些硬币做**一次不重用**的凑数。
+更关键的是，这组面额满足“贪心可行”的性质：
+* 每次拿**当前能拿的最大面额**$\displaystyle \binom{d}{2}\le\Delta$ ，都不会导致“凑不下去”的死角；
+* 拿完一枚后，就把那枚硬币“去掉”（在代码里相当于把 d 减一），剩余的面额依然能用贪心法继续凑；
+* 最终只会剩下 $\Delta=0$ 或 $\Delta=1$，而 $\displaystyle \binom{1}{2}=0$, $\displaystyle \binom{2}{2}=1$ 恰好可以处理这两种情况。
+这个过程保证了从 0 到 $\displaystyle \binom{n}{3}$ 的每一个整数，都**可以**用若干不重复的 $\displaystyle \binom{d}{2}$ 精确表示，并且贪心算法总能找到这种表示。
+
+**但是**，我们注意到**上述的减重操作必须保证**：挂载的节点 $i-d$ 下方必须是链状的，不能是树状的，**不然上述计算贡献的公式会有问题**。
+同时，考虑到：**如果构造的树的形状是一定的，节点编号对于 $weight$ 的贡献是无关的**。
+因此，**我们可以贪心地依次将下方的节点尽可能挂载在最高处**
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+int n, k, mx;
+
+void solve(){
+    cin >> n >> k;
+    mx = n * (n - 1) * (n - 2) / 6;
+    if(k > mx + 1) return void(cout << "No" << endl);
+    cout << "Yes" << endl;
+    k = mx - min(k, mx);
+    // 转化为“要从 mx 中减去的量”：
+    // 若 k <= mx，则 k = mx - k；若 k > mx，则令 k = 0（因为允许偏差 1）
+    int d = n - 1;
+    // d 表示每次想要“跳掉”的深度差（初始为 n-1，即整条链）
+    for(int i = n; i >= 2; i--){
+        while(d * (d - 1) / 2 > k) d--;
+        k -= d * (d - 1) / 2;
+        cout << i - d << ' ' << i << endl;
+        if(d != 1) d--;
+    }
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
