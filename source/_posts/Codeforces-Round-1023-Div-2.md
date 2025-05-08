@@ -473,7 +473,6 @@ signed main(){
     return 0;
 }
 ```
-**Doing:**
 
 ## [CF2107E. Ain and Apple Tree](https://codeforces.com/contest/2107/problem/E)(数学)(贪心)(构造题)
 **一、关键观察**
@@ -500,7 +499,7 @@ signed main(){
 
         此时权重可证为：$\displaystyle weight_{max} = \sum_ \ (paircount)(depth) = \sum_{d=1}^{n-1}(n-d)(d-1) = \frac{(n-1)n(n-2)}{6}.$
 		这是所有 n 节点树中权重的最大值，记作 $mx$。
-        **下面证明：** $\displaystyle \sum_{d=1}^{n-1}(n-d)(d-1) = \frac{(n-1)n(n-2)}{6}.$
+        **下面证明：** $\displaystyle \sum_{d=1}^{n-1}(n-d)(d-1) = \frac{n(n-1)(n-2)}{6}.$
         我们令：$\displaystyle S = \sum_{d=1}^{n-1} (n-d)(d-1).$
         **做一下变形：** 
             令 $k=d-1$，于是：

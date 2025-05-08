@@ -206,3 +206,94 @@ signed main(){
     return 0;
 }
 ```
+
+## [CF2103E. Keep the Sum](https://codeforces.com/contest/2103/problem/E)(模拟)(构造题)
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+#define arr3 array<int, 3>
+int n, k;
+
+void solve(){
+    cin >> n >> k;
+    vi a(n);
+    for(int &x : a) cin >> x;
+    // 如果数组已非递减，则不需要任何操作，直接输出 0
+    if(is_sorted(a.begin(), a.end()))
+        return void(cout << 0 << endl);
+    // 寻找一对和为 k 的枢纽 (x, y)
+    map<int, int> mp; // 值, 坐标
+    int x = -1, y = -1;
+    for(int i = 0; i < n; i++){
+        if(mp.count(k - a[i])){
+            x = mp[k - a[i]];
+            y = i;
+            break;
+        }
+        mp[a[i]] = i;
+    }
+    if(x == -1) return void(cout << -1 << endl);
+    // 若遍历完还没找到，说明无法进行任何操作，输出 -1
+
+    vector<arr3> ans;
+    // work: 在 (i, j) 上执行一次操作，将 d 从 a[i] 挪到 a[j]
+    auto work = [&](int i, int j, int d){
+        a[i] -= d;
+        a[j] += d;
+        ans.push_back({i, j, d});
+    };
+
+    /*
+    把枢纽对搬到数组两端：尽量将 x 移到 0，将 y 移到 n-1
+    如果 x 不在最左，和 a[0] 做一次操作，让 a[x] = a[0]
+    如果 y 不在最右，和 a[n-1] 做一次操作，让 a[y] = a[n-1]
+    */
+    if(x > 0) work(x, y, a[x] - a[0]), x = 0;
+    if(y < n - 1) work(y, x, a[y] - a[n - 1]), y = n - 1;
+
+    vi pos(n);
+    // pos[i]: 表示排序后的第i位元素原本是第pos[i]位元素。
+    iota(pos.begin(), pos.end(), 0ll);
+    // 按 a[pos[i]] 排序
+    sort(pos.begin() + 1, pos.end() - 1, [&](int i, int j){
+        return a[i] < a[j];
+    });
+    
+    // change: 借助枢纽 (0, n-1) 三步交换位置 i 与 j 的值
+    auto change = [&](int i, int j){
+        if(i > j) swap(i, j);
+        work(x, y, a[x] - a[i]);
+        // a[x] -> a[i], a[y] -> (k-a[i])
+        work(i, y, a[i] - a[j]);
+        // a[i] -> a[j], a[y] -> (k-a[j])
+        work(j, y, a[j] - a[x]);
+        // a[j] -> a[x] = 原来的a[i], a[y] -> k - a[x]
+    };
+
+    for(int i = 1; i < n - 1; i++){
+        while(pos[i] != i){ // 表示我们期望位置 i 的元素并不在这里
+            // 现在的第i位元素原本是第pos[i]位元素
+            // 我们想让现在的pos[i]位元素回到原本的pos[pos[i]]上
+            change(pos[i], pos[pos[i]]);
+            swap(pos[i], pos[pos[i]]);
+        }
+    }
+    // 将 a[0] 的剩余值全部倒给 a[n-1]
+    work(x, y, a[x]);
+    cout << ans.size() << endl;
+    for(auto [i, j, d] : ans)
+        // 下标 +1 转成题目要求的 1-based
+        cout << i + 1 << ' ' << j + 1 << ' ' << d << endl;
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
