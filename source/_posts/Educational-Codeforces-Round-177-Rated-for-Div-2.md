@@ -131,3 +131,46 @@ signed main(){
     return 0;
 }
 ```
+
+下面给出这个视频：[排列构成环](https://www.bilibili.com/video/BV1w2421N75o/?vd_source=f0489718ccab992000c983a006bde4a5) 中的例题：
+### [CF1768D. Lucky Permutation](https://codeforces.com/contest/1768/problem/D)(图论)(Permutation)(1800)
+如果一个排列有 $cnt$ 个环，且第 $i$ 个环的大小为 $L_i$，满足： $\displaystyle \sum_{i=1}^{cnt} L_i = n \quad L_i \ge 1$
+那么把这个排序复位(逆序对数为0)，需要的最少交换总次数：
+$\displaystyle \sum_{i=1}^{cnt} (L_i - 1)=\Bigl(\sum_{i=1}^{cnt} L_i\Bigr)-cnt= n - cnt.$
+接下来只需要判断，在原排序中是否有一对相邻的位置属于同一个环
+- 如果有，那么可以在复位时，不将这两个数复位，交换次数 $- 1$
+- 如果没有，就必须再交换一次，交换次数$+ 1$
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+int n;
+
+void solve(){
+    cin >> n;
+    vi a(n + 1);
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    int cnt = 0; // 统计环的个数
+    vi bel(n + 1, -1);
+    for(int i = 1; i <= n; i++){
+        if(bel[i] != -1) continue;
+        for(int j = i; bel[j] == -1; j = a[j]) bel[j] = i;
+        cnt++;
+    }
+    bool flag = false; // 判断是否有相邻位置属于用一个环
+    for(int i = 1; i < n; i++)
+        if(bel[i] == bel[i + 1]) flag = true;
+    cout << n - cnt - (flag ? 1 : -1) << endl;
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
