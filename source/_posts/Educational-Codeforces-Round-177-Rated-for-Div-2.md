@@ -82,3 +82,52 @@ signed main(){
     return 0;
 }
 ```
+
+## [CF2086C. Disappearing Permutation](https://codeforces.com/contest/2086/problem/C)(图论)(并查集)(permutation)(1300)
+**Permutation(排列、置换)**。对于 $n$ 的全排列 $P_n$ ，可以看成特殊的 $Functional \ Graph$，其中只有环。
+对于一个排列中的，长度为 $n$ 的环，需要 $n-1$ 次可以把环排好序。每次交换相当于把环变成两个更小的环，直至变成大小为 1 的自环。
+对于上方概念不理解的话可以看这两个视频的前半部分理解一下：
+1. [Functional graph](https://www.bilibili.com/video/BV1mC411b7sU/?vd_source=f0489718ccab992000c983a006bde4a5)
+2. [排列构成环](https://www.bilibili.com/video/BV1w2421N75o/?vd_source=f0489718ccab992000c983a006bde4a5)
+
+对于本题，每次查询都会把一个点变成0，如果如果这个点的下标为 **i**，题目规定只能将这个点 `a[i] = i`，也就是将这个点强制变成自环，即出边指向自己，但是这个点的入边没有改变，为此我们可以知道，只有将这个点原来所在的整个环上的所有点都变成自环，才能满足题意。
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+int n;
+
+void solve(){
+    cin >> n;
+    vi a(n + 1);
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    vi bel(n + 1, -1), sz(n + 1, 0);
+    // bel: belong, sz: size
+    // bel[i] = i 所属的环代表（初始化为 -1 表示未访问）
+    // siz[i] = 以 i 为代表的环的长度
+    for(int i = 1; i <= n; i++){
+        if(bel[i] != -1) continue;
+        for(int j = i; bel[j] == -1; j = a[j]){
+            bel[j] = i; // 标记它属于以 i 为代表的环
+            sz[i]++; // 环大小 +1
+        }
+    }
+    int ans = 0;
+    for(int i = 1; i <= n; i++){
+        int pos; cin >> pos;
+        ans += sz[bel[pos]]; // 找到这个位置所在的环以及这个环的大小
+        sz[bel[pos]] = 0; // 之后同一环不再贡献
+        cout << ans << " \n"[i == n];
+    }
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
