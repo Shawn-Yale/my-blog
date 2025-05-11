@@ -174,3 +174,49 @@ signed main(){
     return 0;
 }
 ```
+
+##### [CF1677C. Tokitsukaze and Two Colorful Tapes](https://codeforces.com/contest/1677/problem/C)(图论)(Permutation)(贪心)(1900)
+**我们发现**，如果将上下两种颜色连接，就会形成一个环。比如样例 1，其中 $1,5,3,4$ 和 $2,6$ 形成了两个环。题意相当于给定若干个环，然后要给点重编号，使得所有边的端点编号差之和最大。每个环是独立的，所以我们可以先只考虑一个环。
+**我们发现**，$∣a−b∣$ 只有 $a−b$ 或者 $b−a$ 两种情况。所以说，对于环中的一个数 $x$，它要么是都是被减去，要么只被减去一次，要么都是它减去其它数。所以他的贡献只有 $-2x \ , \ 0, \ 2x$ 三种。
+**我们总是希望**：大的数 $x$ 的贡献为 $2x$，小的数 $x$ 的贡献为 $-2x$。
+同时，在一个长度为 $len$ 的环中，一共有 $\displaystyle \left\lfloor \frac{len}{2} \right\rfloor$ 个 $2x$ 贡献，$\displaystyle \left\lfloor \frac{len}{2} \right\rfloor$ 个 $-2x$ 贡献，$len \ mod \ 2$个$0$， $\displaystyle \left\lfloor \frac{len}{2} \right\rfloor$就是每个环中可以极端配对的数量。
+统计整个排列中极端配对的数量和为 $cnt$，依次为这些配对赋值为：$(1, n), \ (2, n - 1), \ ..., \ (cnt, n + 1 - cnt)$，因此答案就是：
+$\displaystyle 2\sum_{i = 1}^{cnt}((n + 1 - i) - i) = 2\sum_{i = 1}^{cnt}(n + 1 - 2i) = 2\Bigl(cnt * (n + 1) - 2\sum_{i = 1}^{cnt}i \Bigr)$ 
+$= 2\Bigl(cnt * (n + 1) - 2 \frac{cnt * (cnt + 1)}{2}\Bigr)= 2\Bigl(cnt * (n - cnt)\Bigr)$ 
+当然，也可以直接 for 循环求和，不必推导最后的公式。
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+int n;
+
+void solve(){
+    cin >> n;
+    vi a(n + 1), b(n + 1), p(n + 1);
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    for(int i = 1; i <= n; i++){
+        cin >> b[i];
+        p[a[i]] = b[i]; // 转化成映射的排列
+    }
+    int cnt = 0; // cnt为可以极端配对的数量
+    vi bel(n + 1, -1);
+    for(int i = 1; i <= n; i++){
+        int len = 0; // x 为环的长度
+        if(bel[i] != -1) continue;
+        for(int j = i; bel[j] == -1; j = p[j])
+            bel[j] = i, len++;
+        cnt += len / 2;
+    }
+    cout << 2 * cnt * (n - cnt) << endl;
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
