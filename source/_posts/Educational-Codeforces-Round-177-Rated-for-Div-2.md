@@ -278,3 +278,81 @@ signed main(){
     return 0;
 }
 ```
+
+## [CF2086D. Even String](https://codeforces.com/contest/2086/problem/D)(数学)(背包)(构造题)
+**题意**：给定 26 个数 `cnt[i]`（第 i 个小写字母出现次数），要求构造长度为 $\displaystyle sum = \sum_{i=0}^{25} cnt[i]$ 的字符串，使得**任意两个相同字母**的下标差都是偶数。等价地，任意一种字母要么全部出现在“奇数位”，要么全部出现在“偶数位”。问：满足要求的不同字符串总数，模 998244353。
+**位置统计：**
+* 总长度 `sum = ∑cnt[i]`。
+- **奇数位数**：$\displaystyle odd = \left\lceil \frac{sum}{2} \right\rceil = \frac{sum + 1}{2}$
+- **偶数位数**：$\displaystyle even = \left\lfloor \frac{sum}{2} \right\rfloor = \frac{sum}{2}$
+
+**背包（子集和）DP：**
+用一维背包计算 `dp[k]`：有多少种「选取若干个整字母包」使得它们的出现次数总和恰好是 `k`。
+特别地，我们关心 `dp[odd]`，表示能选出恰好 `odd` 个字符放到奇数位的方案数。
+
+**多重排列公式：**
+* 如果固定了一组字母放奇数位，那么它们在奇数位上的排列数是 $\displaystyle \frac{odd!}{\prod_{i\in X}cnt[i]!}$
+* 剩余字母在偶数位上的排列数是 $\displaystyle \frac{even!}{\prod_{i\notin X}cnt[i]!}$
+* 两者相乘、再对所有可能的子集 $X$ 求和，就是 $\displaystyle dp[odd]\times \frac{odd!\,\times\,even!}{\prod_{i=0}^{25}cnt[i]!}$
+* 在模 $998244353$ 下，“除以” 可以转成“乘上逆元”。
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+const int mod = 998244353;
+
+int qpow(int a, int b){
+    // 快速幂(用于求乘法逆元)
+    int ans = 1;
+    while(b){
+        if(b & 1) ans = ans * a % mod;
+        a = a * a % mod;
+        b >>= 1;
+    }
+    return ans;
+}
+
+int fact(int a){ // 求阶乘
+    int ans = 1;
+    for(int i = 1; i <= a; i++)
+        ans = ans * i % mod;
+    return ans;
+}
+
+void solve(){
+    vi cnt(26);
+    for(int &x : cnt) cin >> x;
+    int sum = accumulate(cnt.begin(), cnt.end(), 0ll);
+    vi dp(sum + 1);
+    // dp[i]: 有多少种方法可以挑选一部分字母，使得它们的总出现次数正好是 i
+    dp[0] = 1; // 选 0 个字符的方法只有 1 种（什么都不选）
+
+    // 01 背包：每种字母要么加入“奇位包”（总和增加 cnt[i]），要么不加入
+    for(int i = 0; i < 26; i++){
+        if(!cnt[i]) continue; // 出现 0 次就跳过
+        for(int j = sum; j >= cnt[i]; j--){
+            // 从后向前，保证每个字母只计入一次
+            dp[j] = (dp[j] + dp[j - cnt[i]]) % mod;
+        }
+    }
+
+    int odd = (sum + 1) / 2; // 上取整
+    int even = sum / 2; // 下取整
+    int ans = dp[odd] * fact(odd) % mod * fact(even) % mod;
+    // 分子：dp[odd] × odd! × even!
+
+    for(int i = 0; i < 26; i++)
+        ans = ans * qpow(fact(cnt[i]), mod - 2) % mod; // 逆元
+    cout << ans << endl;
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
