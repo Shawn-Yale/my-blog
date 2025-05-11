@@ -220,3 +220,61 @@ signed main(){
     return 0;
 }
 ```
+
+### [CF1672F1. Array Shuffling](https://codeforces.com/contest/1672/problem/f1)(图论)(Permutation)(贪心)(构造题)(2000)(最后一步拼尽全力想不明白😭，过两天再回来补)
+**目标：** 构造一个数组 `b`（是 `a` 的一个排列），使得从 `b` 还原为 `a` 所需的最小交换次数尽可能大（即“最大悲伤度”）。
+从一个排列 `b` 还原到 `a`，等价于将 `b[i] → a[i]` 建图，形成一个置换图（即一个或多个环），每个环长度为 `len` 需要 `len-1` 次交换。
+* 所需最少交换次数 = `n - 环的个数`
+* 所以我们希望 **让环数尽可能少**
+* 但要注意：**每个环中不能出现重复的值**（否则可分裂为多个环）
+因为**如果环里有重复的值，就能拆分这个环，使得环的个数增多**。
+**下面给出证明：**
+设有一个环经过一系列下标：$\displaystyle i_1 \to i_2 \to \cdots \to i_p \to \cdots \to i_q \to \cdots \to i_k \to i_1$
+并且对应的原数组值满足：$\displaystyle a_{i_p} = a_{i_q} = v$
+（同一个值 $v$ 出现在环上了两次，至少两条边 $\displaystyle i_p\to i_{p+1}$ 和 $\displaystyle i_q\to i_{q+1}$ 的源点都带着值 $v$）。
+我们可以这样 **拆分** 这个环：
+	**第一个子环**：$\displaystyle i_p \to i_{p+1} \to \cdots \to i_{q} \to i_p$
+	**第二个子环**：$\displaystyle i_q \to i_{q+1} \to \cdots \to i_{k} \to i_1 \to \cdots \to i_p \to i_q$
+这两个新环的所有节点正好是原来大环的所有节点，**没有遗漏也没有重复**。因此，原来「一个长度为 $k$ 的环」被替换成了「一个长度为 $(q-p+1)$ 的环」和「一个长度为 $k-(q-p)$ 的环」，环数 **增加了 1**。
+
+设 `cnt_max` 是 `a` 中出现最多的元素个数，那么环最多个数 = `cnt_max`，最少交换次数 = `n - cnt_max`
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+#define vii vector<vi>
+int n;
+
+void solve(){
+    cin >> n;
+    vi a(n), cnt(n);
+    vii f(n);
+    for(int i = 0; i < n; i++){
+        cin >> a[i]; a[i]--;
+        f[cnt[a[i]]].emplace_back(i);
+        cnt[a[i]]++;
+    }
+    vi b(n);
+    for(int i = 0; i < n; i++){
+        if(f[i].empty()) break;
+        sort(f[i].begin(), f[i].end(), [&](int i, int j){
+            return a[i] < a[j];
+        });
+        int k = f[i].size();
+        for(int j = 0; j < k; j++)
+            b[f[i][j]] = a[f[i][(j + 1) % k]];
+    }
+    for(int i = 0; i < n; i++)
+        cout << b[i] + 1 << " \n"[i == n - 1];
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
