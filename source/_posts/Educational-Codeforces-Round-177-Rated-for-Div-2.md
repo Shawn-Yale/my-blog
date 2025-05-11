@@ -175,7 +175,7 @@ signed main(){
 }
 ```
 
-##### [CF1677C. Tokitsukaze and Two Colorful Tapes](https://codeforces.com/contest/1677/problem/C)(图论)(Permutation)(贪心)(1900)
+### [CF1677C. Tokitsukaze and Two Colorful Tapes](https://codeforces.com/contest/1677/problem/C)(图论)(Permutation)(贪心)(1900)
 **我们发现**，如果将上下两种颜色连接，就会形成一个环。比如样例 1，其中 $1,5,3,4$ 和 $2,6$ 形成了两个环。题意相当于给定若干个环，然后要给点重编号，使得所有边的端点编号差之和最大。每个环是独立的，所以我们可以先只考虑一个环。
 **我们发现**，$∣a−b∣$ 只有 $a−b$ 或者 $b−a$ 两种情况。所以说，对于环中的一个数 $x$，它要么是都是被减去，要么只被减去一次，要么都是它减去其它数。所以他的贡献只有 $-2x \ , \ 0, \ 2x$ 三种。
 **我们总是希望**：大的数 $x$ 的贡献为 $2x$，小的数 $x$ 的贡献为 $-2x$。
