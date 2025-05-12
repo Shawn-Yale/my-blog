@@ -107,7 +107,8 @@ signed main(){
 }
 ```
 
-## [abc405_d. Fruit Lineup](https://atcoder.jp/contests/abc405/tasks/abc405_e)(组合数学)(乘法逆元)
+## [abc405_e. Fruit Lineup](https://atcoder.jp/contests/abc405/tasks/abc405_e)(组合数学)(乘法逆元)
+**[视频讲解](https://www.bilibili.com/video/BV1QiEgzVEnf/?share_source=copy_web&vd_source=2c70ea18309f42b6e2db78b52312b69e&t=2912)**
 ```cpp
 #include <bits/stdc++.h>
 using namespace std;
