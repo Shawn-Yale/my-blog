@@ -129,3 +129,60 @@ signed main(){
     return 0;
 }
 ```
+
+## [CF2102E. 23 Kingdom](https://codeforces.com/contest/2102/problem/E)(set)
+**[视频讲解](https://www.bilibili.com/video/BV1QvEGzQE6Q/?spm_id_from=333.788.videopod.sections&vd_source=f0489718ccab992000c983a006bde4a5&p=4)**
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+
+void solve(){
+    int n; cin >> n;
+    vi a(n + 1), pre(n + 1, 0), suf(n + 1, 0);
+    // pre[i]: 找到i个元素需要前几个数字
+    // suf[i]: 同理 后缀
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    
+    set<int> st;
+    // 每次可以erase一个<=自己的元素
+    // 找到upper
+    // 如果是begin continue
+    // 否则 ans++, s.erase(--pos);
+    int cur = 0;
+    for(int i = 1; i <= n; i++) st.insert(i);
+    for(int i = 1; i <= n; i++){
+        auto it = st.upper_bound(a[i]);
+        if(it == st.begin()) continue;
+        pre[++cur] = i;
+        st.erase(--it);
+    }
+    st.clear();
+    cur = 0;
+    for(int i = 1; i <= n; i++) st.insert(i);
+    for(int i = n; i; i--){
+        auto it = st.upper_bound(a[i]);
+        if(it == st.begin()) continue;
+        suf[++cur] = i;
+        st.erase(--it);
+    }
+
+    int ans = 0;
+    // 枚举选几个数字
+    for(int i = 1; i <= n; i++){
+        if(pre[i] >= suf[i]) break;
+        ans += suf[i] - pre[i];
+    }
+    cout << ans << endl;
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```

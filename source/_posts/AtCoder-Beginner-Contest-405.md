@@ -131,6 +131,7 @@ int qpow(int a, int b){
 }
 
 int binom(int n, int m){
+    // binomial coefficient: 二项式系数(组合数)  
     if(n < 0 || m < 0 || n < m) return 0ll;
     if(n == m) return 1ll;
     return fact[n] * inv[m] % mod * inv[n - m] % mod;
