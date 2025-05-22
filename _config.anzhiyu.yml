@@ -847,7 +847,7 @@ aside:
   card_announcement:
     enable: true
     content: |
-      尽量保持一天 1~2 场比赛的更新频率, 周日(整理题目)可能不更。
+      正在深入学习二分图。日常的比赛暂停, 只打每周的codeforces和atcoder。
 
   card_weixin:
     enable: false
