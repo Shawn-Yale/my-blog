@@ -1,0 +1,127 @@
+---
+title: P6619 [省选联考 2020 A/B 卷] 冰火战士
+date: 2025-07-18 21:14:00
+tags: [树状数组, 倍增, 省选/NOI−]
+categories: [算法刷题]
+mathjax: true
+---
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+#define endl '\n'
+#define int long long
+#define vi vector<int>
+#define lowbit(x) ((x) & (-x))
+
+struct BIT{
+    int n; vi tr;
+    BIT(int _n = 0){init(_n);}
+    void init(int _n){
+        n = _n;
+        tr.assign(n + 1, 0);
+    }
+    void add(int x, int k){
+        for(int i = x; i <= n; i += lowbit(i)) tr[i] += k;
+    }
+    int sum(int x){
+        int ans = 0;
+        for(int i = x; i; i -= lowbit(i)) ans += tr[i];
+        return ans;
+    }
+    int get(int i){return tr[i];}
+};
+struct query{int op, k, t, x, y;};
+
+void solve(){
+    int n; cin >> n;
+    vector<query> qs(n);
+    vi allx; // 记录所有可能的温度
+    for(int i = 0; i < n; i++){
+        cin >> qs[i].op;
+        if(qs[i].op == 1){
+            cin >> qs[i].t >> qs[i].x >> qs[i].y;
+            allx.emplace_back(qs[i].x);
+        }else cin >> qs[i].k, qs[i].k--;
+    }
+    sort(allx.begin(), allx.end());
+    allx.erase(unique(allx.begin(), allx.end()), allx.end());
+    int m = allx.size();
+    BIT ice(m + 1), fire(m + 1);
+
+    auto idx = [&](int x){
+        return lower_bound(allx.begin(), allx.end(), x) - allx.begin() + 1;
+    };
+
+    int ice_sum = 0, fire_sum = 0;
+
+    for(int i = 0; i < n; i++){
+        if(qs[i].op == 1){
+            qs[i].x = idx(qs[i].x); // 将温度映射成离散下标
+            int x = qs[i].x, y = qs[i].y;
+            if(qs[i].t == 0) ice.add(x, y), ice_sum += y;
+            else fire.add(x + 1, y), fire_sum += y;
+            // fire 前缀和取到 pos-1 为止，所以先右偏一个单位，方便倍增
+        }else{
+            int k = qs[i].k;
+            int t = qs[k].t, x = qs[k].x, y = qs[k].y;
+            if(t == 0) ice.add(x, -y), ice_sum -= y;
+            else fire.add(x + 1, -y), fire_sum -= y;
+        }
+
+        // if(ice_sum == 0 || fire_sum == 0){
+        //     cout << "Peace\n";
+        //     continue;
+        // }
+
+        // 寻找最大 p1 使 ice.query(p1) < (total_fire - fire.query(p1))
+        int p1 = 0, s0 = 0, s1 = fire_sum; // s0:ice, s1: fire
+        for(int d = 1 << 21; d; d >>= 1){
+            int npos = p1 + d;
+            if(npos > m) continue;
+            int ns0 = s0 + ice.get(npos), ns1 = s1 - fire.get(npos);
+            // 这里 fire 取到下标 >= npos到后缀和，没有 -1 是因为存入的时候右偏了一个单位
+            if(ns0 < ns1){ // 取到 ice < fire 的最后一位 
+                p1 = npos;
+                s0 = ns0, s1 = ns1;
+            }
+        }
+        int ans1 = s0;
+
+        // 若 p1<最大坐标，还需考虑p1右端点及该端点可能存在的平衡点
+        // 平衡点即fire可能保持不变的点
+        int p2 = 0;
+        int ans2 = min(ice.sum(p1 + 1), fire_sum - fire.sum(p1 + 1));
+        if(p1 < m){
+            s0 = 0, s1 = fire_sum;
+            for(int d = 1 << 21; d; d >>= 1){
+                int npos = p2 + d;
+                if(npos > m) continue;
+                int ns0 = s0 + ice.get(npos), ns1 = s1 - fire.get(npos);
+                int mn = min(ns0, ns1);
+                if(ns0 < ns1 || mn == ans2){
+                    // ice<fire 或平衡时都可以往右推进，以便取更大温度下标
+                    p2 = npos;
+                    s0 = ns0, s1 = ns1;
+                }
+            }
+            ans2 = min(s0, s1);
+        }
+        int pos, ans;
+        if(max(ans1, ans2) == 0) cout << "Peace\n";
+        else{
+            if(ans1 > ans2) pos = p1, ans = ans1;
+            else pos = p2, ans = ans2;
+            cout << allx[pos - 1] << ' ' << 2 * ans << endl;
+        }
+    }
+}
+
+signed main(){
+    ios::sync_with_stdio(0), cin.tie(0), cout.tie(0);
+    int T = 1;
+    //cin >> T;
+    while(T--) solve();
+    return 0;
+}
+```
