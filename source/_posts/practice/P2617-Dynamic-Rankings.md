@@ -6,6 +6,7 @@ categories: [算法刷题]
 mathjax: true
 ---
 
+**[题目链接](https://www.luogu.com.cn/problem/P2617)**
 **[董晓算法讲解 -- b站](https://www.bilibili.com/video/BV1hC411877G?spm_id_from=333.788.videopod.sections&vd_source=f0489718ccab992000c983a006bde4a5)**
 **[董晓算法代码 -- 博客园](https://www.cnblogs.com/dx123/p/18090964)**
 
