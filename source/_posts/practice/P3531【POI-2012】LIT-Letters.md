@@ -6,6 +6,8 @@ categories: [算法刷题]
 mathjax: true
 ---
 
+**[题目链接](https://www.luogu.com.cn/problem/P3531)**
+
 交换相邻两个数就决定了是求**逆序对**
 
 对于A中的一个字符在B中的位置，我们可以发现同一个字符肯定是按从前往后的顺序出现在B中的。
