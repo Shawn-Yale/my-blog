@@ -847,7 +847,7 @@ aside:
   card_announcement:
     enable: true
     content: |
-      点技能树(ing)!!!
+      点技能树ing!!! 置顶文章为正在学习的内容，更新ing
 
   card_weixin:
     enable: false
