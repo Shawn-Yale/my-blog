@@ -5,11 +5,14 @@ tags:
   - Kruskal重构树
   - LCA
   - 树链剖分
+  - 线段树
   - 提高+/省选−
 categories:
   - 算法刷题
 mathjax: true
 ---
+
+**[题目链接](https://codeforces.com/contest/1706/problem/E)**
 
 这道题的核心在于：对于每个查询区间 $[l,r]$，要找出一个最小的 $k$，使得只使用编号为 $1,2,…,k$ 的前 $k$ 条边，就能让区间内任意两点两两连通。直接对每个查询套一遍二分＋联通判断（$DSU$）显然超时，因为 $\sum q$ 和 $\sum m$ 都可达 $2×10^5$。
 
